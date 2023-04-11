@@ -1,0 +1,111 @@
+:root {
+  --body-font: 'Sora', sans-serif, monospace;
+}
+
+// global styles
+html {
+  scroll-behavior: smooth;
+}
+
+span {
+  display: inline-block;
+}
+
+body {
+  font-family: var(--body-font);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+img,
+figure {
+  width: 100%;
+  height: 100%;
+}
+
+figure {
+  overflow: hidden;
+}
+
+img {
+  object-fit: cover;
+  object-position: center;
+}
+
+// hero
+.hero {
+  height: 100vh;
+  position: relative;
+
+  &__img {
+    height: 100%;
+  }
+
+  &__text {
+    position: absolute;
+    top: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-align: center;
+    font-weight: 100;
+
+    h1 {
+      font-size: 4rem;
+      font-weight: 400;
+    }
+
+    p {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.photo__grid {
+  padding: 6rem 2rem;
+  display: grid;
+  gap: 1.5rem;
+
+  &__img {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .photo__grid {
+    max-width: 1024px;
+    margin: 0 auto;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 24rem;
+
+    &__img {
+      &.wide {
+        grid-column: span 2 / auto;
+      }
+
+      &.tall {
+        grid-row: span 2 / auto;
+      }
+
+      &.img--bottom {
+        img {
+          object-position: bottom;
+        }
+      }
+
+      &.img--top {
+        img {
+          object-position: top;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 1800px) {
+  .photo__grid {
+    max-width: 1200px;
+  }
+}
