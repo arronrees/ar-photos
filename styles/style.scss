@@ -3,10 +3,6 @@
 }
 
 // global styles
-html {
-  scroll-behavior: smooth;
-}
-
 span {
   display: inline-block;
 }
@@ -32,6 +28,23 @@ figure {
 img {
   object-fit: cover;
   object-position: center;
+}
+
+// scroller
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 // hero
