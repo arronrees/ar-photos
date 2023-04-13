@@ -3,4 +3,10 @@ import './styles/reset.css';
 import './styles/style.scss';
 
 // js
-import './js/scroll';
+import { initScroll } from './js/scroll';
+import { initLoadImages } from './js/images';
+
+document.addEventListener('DOMContentLoaded', () => {
+  initLoadImages();
+  initScroll();
+});
