@@ -156,6 +156,8 @@ function imagePopup() {
     });
 
     img.addEventListener('click', (e) => {
+      document.body.style.overflowY = 'hidden';
+
       let height = 0;
       let width = 0;
 
@@ -208,6 +210,8 @@ function imagePopup() {
   // close popup
   container.addEventListener('click', ({ target }) => {
     if (target === containerCover) {
+      document.body.style.overflowY = 'visible';
+
       closeTl
         .fromTo(popupCover, { xPercent: -105 }, { xPercent: 0 })
         .fromTo(
@@ -228,7 +232,8 @@ function imagePopup() {
             stagger: 0.05,
           },
           { xPercent: 105, skewX: -9 }
-        );
+        )
+        .to([container, containerCover], { skewX: 0 });
     }
   });
 }
