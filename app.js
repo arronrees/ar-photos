@@ -85,19 +85,17 @@ function imagePopup() {
 
   const images = document.querySelectorAll('.photo__grid__img');
 
+  // open popup
   images.forEach((img) => {
     const imageSrc = img.querySelector('img').src;
     const imageWidth = img.querySelector('img').naturalWidth;
     const imageHeight = img.querySelector('img').naturalHeight;
 
-    const tl = gsap.timeline({
+    const opentl = gsap.timeline({
       defaults: { duration: 0.725, ease: 'power1.inOut' },
     });
 
     img.addEventListener('click', (e) => {
-      console.log(imageWidth);
-      console.log(imageHeight);
-
       let height = 0;
       let width = 0;
 
@@ -113,15 +111,16 @@ function imagePopup() {
       popup.style.width = `${width}`;
       popup.style.height = `${height}`;
 
-      tl.fromTo(
-        [container, containerCover],
-        { xPercent: -105, skewX: 9 },
-        {
-          xPercent: 0,
-          skewX: 0,
-          stagger: 0.08,
-        }
-      )
+      opentl
+        .fromTo(
+          [container, containerCover],
+          { xPercent: -105, skewX: 9 },
+          {
+            xPercent: 0,
+            skewX: 0,
+            stagger: 0.08,
+          }
+        )
         .fromTo(
           popup,
           { xPercent: -105, skewX: 9 },
@@ -135,6 +134,37 @@ function imagePopup() {
         .fromTo(popupCover, { xPercent: 0 }, { xPercent: 105 }, '-=0.18')
         .fromTo(popupImage, { scale: 1.15 }, { scale: 1 }, '-=0.725');
     });
+  });
+
+  const closeTl = gsap.timeline({
+    defaults: { duration: 0.5, ease: 'power1.inOut' },
+  });
+
+  // close popup
+  container.addEventListener('click', ({ target }) => {
+    if (target === containerCover) {
+      closeTl
+        .fromTo(popupCover, { xPercent: -105 }, { xPercent: 0 })
+        .fromTo(
+          popup,
+          {
+            xPercent: 0,
+            skewX: 0,
+            stagger: 0.08,
+          },
+          { xPercent: 105, skewX: -9 },
+          '-=0.28'
+        )
+        .fromTo(
+          [container, containerCover],
+          {
+            xPercent: 0,
+            skewX: 0,
+            stagger: 0.05,
+          },
+          { xPercent: 105, skewX: -9 }
+        );
+    }
   });
 }
 
