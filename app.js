@@ -48,6 +48,66 @@ function initScroll() {
   requestAnimationFrame(raf);
 }
 
+function initCursorFollow() {
+  const cursor = document.querySelector('#cursor');
+  const cursorIconOpen = document.querySelector('#cursor .cursor__icon--open');
+  const cursorIconClose = document.querySelector(
+    '#cursor .cursor__icon--close'
+  );
+
+  let cursorX = 0;
+  let cursorY = 0;
+
+  let ballX = 0;
+  let ballY = 0;
+
+  let speed = 0.1;
+
+  function animate() {
+    let distX = cursorX - ballX;
+    let distY = cursorY - ballY;
+
+    ballX = ballX + distX * speed;
+    ballY = ballY + distY * speed;
+
+    cursor.style.left = `${ballX}px`;
+    cursor.style.top = `${ballY}px`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  function cursorFollow({ pageX, pageY, target }) {
+    cursorX = pageX;
+    cursorY = pageY;
+
+    if (target.classList.contains('image__popup__box')) {
+      cursor.classList.add('cursor--img');
+    } else {
+      cursor.classList.remove('cursor--img');
+    }
+
+    if (target.classList.contains('photo__container__cover')) {
+      cursor.classList.add('cursor--icon--close');
+      cursorIconClose.classList.add('cursor__icon--show');
+    } else {
+      cursor.classList.remove('cursor--icon--close');
+      cursorIconClose.classList.remove('cursor__icon--show');
+    }
+
+    if (target.classList.contains('photo__grid__img')) {
+      cursor.classList.add('cursor--icon--open');
+      cursorIconOpen.classList.add('cursor__icon--show');
+    } else {
+      cursor.classList.remove('cursor--icon--open');
+      cursorIconOpen.classList.remove('cursor__icon--show');
+    }
+  }
+
+  document.addEventListener('mousemove', cursorFollow);
+}
+
 function imagesAppearOnScroll() {
   const images = document.querySelectorAll('.photo__grid__img');
 
@@ -73,7 +133,7 @@ function imagesAppearOnScroll() {
 
 function imagePopup() {
   const container = document.querySelector('#photo__container');
-  const containerCover = container.querySelector('.cover');
+  const containerCover = container.querySelector('.photo__container__cover');
   const popup = container.querySelector('.image__popup__container');
   const popupImage = popup.querySelector('.image__popup__box');
   const popupCover = popup.querySelector('.image__popup__cover');
@@ -105,6 +165,11 @@ function imagePopup() {
       } else {
         height = '80vh';
         width = `${(imageWidth / imageHeight) * 100 * 0.8}vh`;
+      }
+
+      if (imageWidth === 0 || imageHeight === 0) {
+        width = '80vw';
+        height = '80vh';
       }
 
       popupImage.style.backgroundImage = `url('${imageSrc}')`;
@@ -171,6 +236,7 @@ function imagePopup() {
 document.addEventListener('DOMContentLoaded', () => {
   initLoadImages();
   initScroll();
+  initCursorFollow();
   imagesAppearOnScroll();
   imagePopup();
 });
