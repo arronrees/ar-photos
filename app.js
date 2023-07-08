@@ -48,7 +48,7 @@ function initScroll() {
   requestAnimationFrame(raf);
 }
 
-function initImagesAppearOnScroll() {
+function imagesAppearOnScroll() {
   const images = document.querySelectorAll('.photo__grid__img');
 
   images.forEach((img) => {
@@ -71,8 +71,76 @@ function initImagesAppearOnScroll() {
   });
 }
 
+function imagePopup() {
+  const container = document.querySelector('#photo__container');
+  const containerCover = container.querySelector('.cover');
+  const popup = container.querySelector('.image__popup__container');
+  const popupImage = popup.querySelector('.image__popup__box');
+  const popupCover = popup.querySelector('.image__popup__cover');
+
+  gsap.set([container, containerCover, popup], {
+    xPercent: -105,
+    scale: 1,
+  });
+
+  const images = document.querySelectorAll('.photo__grid__img');
+
+  images.forEach((img) => {
+    const imageSrc = img.querySelector('img').src;
+    const imageWidth = img.querySelector('img').naturalWidth;
+    const imageHeight = img.querySelector('img').naturalHeight;
+
+    const tl = gsap.timeline({
+      defaults: { duration: 0.725, ease: 'power1.inOut' },
+    });
+
+    img.addEventListener('click', (e) => {
+      console.log(imageWidth);
+      console.log(imageHeight);
+
+      let height = 0;
+      let width = 0;
+
+      if (imageWidth > imageHeight) {
+        width = '80vw';
+        height = `${(imageHeight / imageWidth) * 100 * 0.8}vw`;
+      } else {
+        height = '80vh';
+        width = `${(imageWidth / imageHeight) * 100 * 0.8}vh`;
+      }
+
+      popupImage.style.backgroundImage = `url('${imageSrc}')`;
+      popup.style.width = `${width}`;
+      popup.style.height = `${height}`;
+
+      tl.fromTo(
+        [container, containerCover],
+        { xPercent: -105, skewX: 9 },
+        {
+          xPercent: 0,
+          skewX: 0,
+          stagger: 0.08,
+        }
+      )
+        .fromTo(
+          popup,
+          { xPercent: -105, skewX: 9 },
+          {
+            xPercent: 0,
+            skewX: 0,
+            stagger: 0.08,
+          },
+          '-=0.23'
+        )
+        .fromTo(popupCover, { xPercent: 0 }, { xPercent: 105 }, '-=0.18')
+        .fromTo(popupImage, { scale: 1.15 }, { scale: 1 }, '-=0.725');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initLoadImages();
   initScroll();
-  initImagesAppearOnScroll();
+  imagesAppearOnScroll();
+  imagePopup();
 });
